@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Peminjaman Buku</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+      margin: 0;
+      padding: 0;
+      background-image: url(backgroundd.png);
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background-color: #ffffff;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    h1 {
+      text-align: center;
+      color: #007acc;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #007acc;
+      border-radius: 4px;
+      width: 570px;
+    }
+    button {
+      background-color: #007acc;
+      color: #ffffff;
+      cursor: pointer;
+      width: 590px;
+    }
+    button:hover {
+      background-color: #005f99;
+    }
+    .message {
+      text-align: center;
+      margin: 10px 0;
+      font-weight: bold;
+    }
+    .success {
+      color: green;
+    }
+    .error {
+      color: red;
+    }
+    .link {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .link a {
+      color: #007acc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .link a:hover {
+      text-decoration: underline;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #007acc;
+    }
+    th {
+      background-color: #007acc;
+      color: white;
+    }
+    /* Media Queries untuk Responsif */
+        @media (max-width: 768px) {
+            .container {
+                width: 80%; /* Lebih lebar di perangkat dengan lebar kurang dari 768px */
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: 90%; /* Lebih lebar di perangkat dengan lebar kurang dari 480px */
+                padding: 15px;
+            }
+            h2 {
+                font-size: 20px; /* Menyesuaikan ukuran font di perangkat kecil */
+            }
+            input[type="text"], input[type="password"], input[type="email"], button {
+                font-size: 14px; /* Mengurangi ukuran font untuk perangkat kecil */
+                padding: 8px; /* Mengurangi ukuran padding */
+            }
+        }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Form Peminjaman Buku</h1>
+    <div id="message" class="message"></div>
+    <form id="borrowForm">
+      <div class="form-group">
+        <label for="name">Nama Peminjam</label>
+        <input type="text" id="name" name="name" placeholder="Masukkan nama Anda">
+      </div>
+      <div class="form-group">
+        <label for="book">Judul Buku</label>
+        <input type="text" id="book" name="book" placeholder="Masukkan judul buku">
+      </div>
+      <div class="form-group">
+        <label for="tanggal">Tanggal Pinjam</label>
+        <input type="date" id="tanggal" name="tanggal" placeholder="Masukkan judul buku">
+      </div>
+      <button type="button" onclick="submitForm()">Pinjam Buku</button>
+    </form>
+    <div class="link">
+      <a href="#" onclick="showBorrowList()">Daftar Peminjaman</a>
+    </div>
+    <div id="borrowList" style="display: none;">
+      <h2>Daftar Peminjaman</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Nama Peminjam</th>
+            <th>Judul Buku</th>
+            <th>Tanggal</th>
+          </tr>
+        </thead>
+        <tbody id="borrowTable">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const borrowData = [];
+
+    function submitForm() {
+      const name = document.getElementById('name').value.trim();
+      const book = document.getElementById('book').value.trim();
+      const tanggal = document.getElementById('tanggal').value.trim();
+      const messageDiv = document.getElementById('message');
+
+      if (!name || !book || !tanggal) {
+        messageDiv.textContent = 'Form masih kosong. Gagal mengirim!';
+        messageDiv.className = 'message error';
+        return;
+      }
+
+      borrowData.push({ name, book, tanggal});
+      messageDiv.textContent = 'Berhasil meminjam buku!';
+      messageDiv.className = 'message success';
+
+      document.getElementById('borrowForm').reset();
+    }
+
+    function showBorrowList() {
+      const borrowList = document.getElementById('borrowList');
+      const borrowTable = document.getElementById('borrowTable');
+      borrowTable.innerHTML = '';
+
+      borrowData.forEach(item => {
+        const row = `<tr><td>${item.name}</td><td>${item.book}</td><td>${item.tanggal}</td></tr>`;
+        borrowTable.innerHTML += row;
+      });
+
+      borrowList.style.display = 'block';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register</title>
+    <link href="logo.png" rel="icon">
+  <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url(backgroundd.png);
+        }
+        div img {
+            max-width: 250px; /* Atur ukuran maksimum logo */
+            width: 150%;
+            align-items: center;
+            padding: 50px;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 350px;
+        }
+        h2 {
+            text-align: center;
+            color: #007bff;
+            margin-top: 0;
+        }
+        label {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="password"], input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            width: 340px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 360px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .link {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Media Queries untuk Responsif */
+        @media (max-width: 768px) {
+            .container {
+                width: 80%; /* Lebih lebar di perangkat dengan lebar kurang dari 768px */
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: 90%; /* Lebih lebar di perangkat dengan lebar kurang dari 480px */
+                padding: 15px;
+            }
+            h2 {
+                font-size: 20px; /* Menyesuaikan ukuran font di perangkat kecil */
+            }
+            input[type="text"], input[type="password"], input[type="email"], button {
+                font-size: 14px; /* Mengurangi ukuran font untuk perangkat kecil */
+                padding: 8px; /* Mengurangi ukuran padding */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="login-container">
+    <img src="logo.png" alt="logo perpusda">
+    <h2>Login Perpusda Surakarta.</h2>
+    <form id="login-form">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Masukkan username" required>
+        <label for="password">Password</label>
+        <input type="password" id="login-password" placeholder="Masukkan password" required>
+        <button type="submit">Login</button>
+    </form>
+    <div class="link">
+        <p>Belum punya akun? <a href="javascript:void(0);" onclick="showRegisterForm()">Registrasi di sini.</a></p>
+    </div>
+</div>
+
+<div class="container" id="register-container" style="display:none;">
+    <img src="logo.png" alt="logo perpusda">
+    <h2>Registrasi Perpusda Surakarta.</h2>
+    <form id="register-form">
+        <label for="register-username">Username</label>
+        <input type="text" id="register-username" placeholder="Masukkan username" required>
+        <label for="register-password">Password</label>
+        <input type="password" id="register-password" placeholder="Masukkan password" required>
+        <label for="register-alamat">Alamat</label>
+        <input type="text" id="register-alamat" placeholder="Masukkan alamat" required>
+        <button type="submit">Register</button>
+    </form>
+    <div class="link">
+        <p>Sudah punya akun? <a href="javascript:void(0);" onclick="showLoginForm()">Login di sini.</a></p>
+    </div>
+</div>
+
+<script>
+    // Function to show the login form
+    function showLoginForm() {
+        document.getElementById("login-container").style.display = "block";
+        document.getElementById("register-container").style.display = "none";
+    }
+
+    // Function to show the register form
+    function showRegisterForm() {
+        document.getElementById("login-container").style.display = "none";
+        document.getElementById("register-container").style.display = "block";
+    }
+
+    // Handle login form submission
+    document.getElementById("login-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("login-password").value;
+
+        // Retrieve stored users from localStorage
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+
+        // Check if the user exists
+        const user = users.find(user => user.username === username && user.password === password);
+
+        if (user) {
+            alert("Login successful!");
+            window.location.href = "index.html"; 
+        } else {
+            alert("Invalid username or password!");
+        }
+    });
+
+    // Handle register form submission
+    document.getElementById("register-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        const username = document.getElementById("register-username").value;
+        const alamat = document.getElementById("register-alamat").value;
+        const password = document.getElementById("register-password").value;
+
+        // Retrieve stored users from localStorage
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+
+        // Check if the username already exists
+        if (users.find(user => user.username === username)) {
+            alert("Username already taken!");
+            return;
+        }
+
+        // Create new user
+        const newUser = {
+            username: username,
+            alamat: alamat,
+            password: password
+        };
+
+        // Store the new user in localStorage
+        users.push(newUser);
+        localStorage.setItem("users", JSON.stringify(users));
+
+        alert("Registration successful! Please login.");
+        showLoginForm();
+    });
+</script>
+
+</body>
+</html>
